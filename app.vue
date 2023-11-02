@@ -9,20 +9,17 @@
     <client-only>
       <YandexMap
         class="address__map"
-        :coordinates="coords"
+        :coordinates="INIT_MAP_COORDINATES"
         :detailed-controls="detailedControls"
         :controls="controls"
+        @click="setPlacemark"
       >
         <YandexMarker
-          :coordinates="coords"
+          :coordinates="coordinates"
           :marker-id="123"
         />
       </YandexMap>
     </client-only>
-    <!-- <div
-      id="map"
-      class="address__map"
-    ></div> -->
   </div>
 </template>
 
@@ -31,23 +28,16 @@ import { getSuggestions } from "@@/utils/dadata-api";
 import { YandexMap, YandexMarker } from "vue-yandex-maps";
 import { loadYmap } from "vue-yandex-maps";
 
-// useHead({
-//   script: [
-//     {
-//       src: "https://api-maps.yandex.ru/2.1/?apikey=7a0149dd-1fbd-4f0c-9b2a-3fcc13e1edef&lang=ru_RU",
-//       type: "text/javascript",
-//     },
-//     {
-//       src: "_nuxt/utils/yandex-map.ts",
-//       type: "text/javascript",
-//     },
-//   ],
-// });
-
 const controls = ["fullscreenControl"];
 const detailedControls = { zoomControl: { position: { right: 10, top: 50 } } };
 const INIT_MAP_COORDINATES = [55.75, 37.62];
-const coords = ref(INIT_MAP_COORDINATES);
+const coordinates = ref(INIT_MAP_COORDINATES);
+
+const setPlacemark = (e: any) => {
+  coordinates.value = e.get("coords");
+  console.log(e.get("coords"));
+  console.log(coordinates.value);
+};
 
 const settings = {
   apiKey: "7a0149dd-1fbd-4f0c-9b2a-3fcc13e1edef",
