@@ -24,14 +24,17 @@
 </template>
 
 <script setup lang="ts">
-import { getSuggestions } from "@@/utils/dadata-api";
+import { getSuggestions, getCoordsByAddress, getAddressByCoords } from "@@/utils/dadata-api";
 import { YandexMap, YandexMarker } from "vue-yandex-maps";
-import { loadYmap } from "vue-yandex-maps";
+
 
 const controls = ["fullscreenControl"];
 const detailedControls = { zoomControl: { position: { right: 10, top: 50 } } };
 const INIT_MAP_COORDINATES = [55.75, 37.62];
-const coordinates = ref(INIT_MAP_COORDINATES);
+
+const coordinates = ref([0, 0]);
+const address = ref("");
+const suggestions = ref([]);
 
 const setPlacemark = (e: any) => {
   coordinates.value = e.get("coords");
@@ -39,17 +42,9 @@ const setPlacemark = (e: any) => {
   console.log(coordinates.value);
 };
 
-const settings = {
-  apiKey: "7a0149dd-1fbd-4f0c-9b2a-3fcc13e1edef",
-};
+getAddressByCoords({ lat: 55.76466, lon: 37.61621 });
+getCoordsByAddress();
 
-async function onMounted() {
-  await loadYmap(settings);
-  // здесь доступна переменная ymaps
-}
-
-const address = ref("");
-const suggestions = ref([]);
 
 async function setSuggestions() {
   const newSuggestions = await getSuggestions(address.value);
