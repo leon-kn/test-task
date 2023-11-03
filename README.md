@@ -3,4 +3,4 @@
 расширение - https://chrome.google.com/webstore/detail/allow-cors-access-control/lhobafahddgcelffkeicbaginigeejlf
 через консоль - https://alfilatov.com/posts/run-chrome-without-cors/
 
-Также может закончиться количество бесплатных запросов к dadata и нужно будет зарегистрировать там новый аккаунт, получить новый apikey и вставить его в apiClient.ts файл
+Также может закончиться количество бесплатных запросов к dadata (бесплатных всего 100). Тогда нужно будет зарегистрировать на dadata новый аккаунт, получить новый apikey и secretkey и вставить их в apiClient.ts файл
