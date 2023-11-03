@@ -6,6 +6,7 @@
       :suggestions="suggestions"
       @complete="setSuggestions"
     />
+    {{ newCoordinates }}
     <client-only>
       <YandexMap
         class="address__map"
@@ -24,9 +25,13 @@
 </template>
 
 <script setup lang="ts">
-import { getSuggestions, getCoordsByAddress, getAddressByCoords } from "@@/utils/dadata-api";
+import {
+  getSuggestions,
+  getCoordsByAddress,
+  getAddressByCoords,
+  getCoords,
+} from "@@/utils/dadata-api";
 import { YandexMap, YandexMarker } from "vue-yandex-maps";
-
 
 const controls = ["fullscreenControl"];
 const detailedControls = { zoomControl: { position: { right: 10, top: 50 } } };
@@ -35,16 +40,18 @@ const INIT_MAP_COORDINATES = [55.75, 37.62];
 const coordinates = ref([0, 0]);
 const address = ref("");
 const suggestions = ref([]);
+const newCoordinates = ref([0, 0]);
 
-const setPlacemark = (e: any) => {
+const setPlacemark = async (e: any) => {
   coordinates.value = e.get("coords");
   console.log(e.get("coords"));
   console.log(coordinates.value);
+  const newCoords = await getCoords();
+  newCoordinates.value = newCoords;
+  console.log(newCoordinates);
 };
 
 getAddressByCoords({ lat: 55.76466, lon: 37.61621 });
-getCoordsByAddress();
-
 
 async function setSuggestions() {
   const newSuggestions = await getSuggestions(address.value);
