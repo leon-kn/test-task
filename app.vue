@@ -36,13 +36,7 @@ const MAP_DETAILED_CONTROLS = { zoomControl: { position: { right: 10, top: 50 } 
 const searchBar = ref("");
 const suggestions = ref([]);
 const coordinates = ref(INIT_MAP_COORDINATES);
-const addressObject = reactive({
-  city: "",
-  street: "",
-  house: "",
-  latitude: 0,
-  longitude: 0,
-});
+const customerAddressData = ref(null);
 
 async function setSuggestions() {
   const newSuggestions = await suggestionService.getSuggestions(searchBar.value);
@@ -54,23 +48,31 @@ async function setPlacemark(e: any) {
   const { address, addressData } = await suggestionService.getAddressByCoords(coordinates.value);
   searchBar.value = address;
 
-  createAddressObject(addressData);
+  customerAddressData.value = addressData;
 }
 
 async function setAddress() {
   const { coords, addressData } = await cleanerService.getCoordsByAddress(searchBar.value);
   coordinates.value = coords;
 
-  createAddressObject(addressData);
+  customerAddressData.value = addressData;
 }
 
-function createAddressObject(placemarkData: any) {
-  addressObject.city = placemarkData.city;
-  addressObject.street = placemarkData.street;
-  addressObject.house = placemarkData.house;
-  addressObject.latitude = placemarkData.geo_lat;
-  addressObject.longitude = placemarkData.geo_lon;
-}
+const addressObject = computed(() => {
+  if (!customerAddressData.value) {
+    return null;
+  }
+
+  const { city, street, house, geo_lat, geo_lon } = customerAddressData.value;
+  return {
+    city,
+    street,
+    house,
+    latitude: geo_lat,
+    longitude: geo_lon,
+  };
+});
+
 </script>
 
 <style lang="scss" scoped>
