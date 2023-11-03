@@ -8,7 +8,9 @@ export class CleanerService {
     this.api = new CleanerApi(client);
   }
 
-  getCoordsByAddress(queryString: string) {
-    return this.api.getCoordsByAddress(queryString);
+  async getCoordsByAddress(queryString: string) {
+    const addressData = await this.api.getCoordsByAddress(queryString);
+    const coords = [Number(addressData.geo_lat), Number(addressData.geo_lon)];
+    return { coords, addressData };
   }
 }
